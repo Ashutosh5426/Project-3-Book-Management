@@ -58,7 +58,8 @@ const bookSchema = new mongoose.Schema({
 
     releasedAt: {
         type: Date,
-        require:true
+        require:true,
+        default:Date.now
     },
    
 }, 
