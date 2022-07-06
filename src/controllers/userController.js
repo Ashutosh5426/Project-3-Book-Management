@@ -67,7 +67,7 @@ let loginUser = async function(req,res){
     if(!email){return res.status(400).send({status : false, msg : "email field is Required"})}
     if(!password){return res.status(400).send({status : false, msg : "password field is Required"})}
 
-    let user = await user.findOne({email:email,password:})
+    let user = await user.findOne({email:email,password:password})
     if(!user){return res.status(400).send({status : false, msg : "You entered a wrong Login Credentials"})}
     
     let token = jwt.sign(
@@ -75,7 +75,9 @@ let loginUser = async function(req,res){
           userId: user._id.toString(),
           
         },
-        "functionup-radon"
+        "functionup-radon",{
+            expiresIn : '10m'
+        }
       );
       res.setHeader("x-api-key", token);
       res.status(201).send({ status: true, data: {token: token }});
