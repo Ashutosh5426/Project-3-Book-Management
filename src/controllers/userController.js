@@ -18,23 +18,23 @@ const registerUser = async function (req, res) {
         let name = bodyData.name
         if (!name) { return res.status(400).send({ status: false, msg: "name field is Required" }) }
 
-      
-            var checkName = /^[A-Za-z\s]+$/;
-           
-        if (!checkName.test(name)) { return res.status(400).send({ status: false, msg: "You entered a invalid Name" }) }
-        
-        // console.log("abcd")
-        let phone=bodyData.phone
 
-        if(!phone){return res.status(400).send({status : false, msg : "phone field is Required"})}
-        if(phone.length!=10){return res.status(400).send({status : false, msg: "You entered an invalid Phone Number"})}
-       
-            var checkPhone = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
-            
-        if(!checkPhone.test(phone)){return res.status(400).send({status : false, msg : "You entered a invalid Phone Number"})}
-    
-        let findPhone = await user.findOne({phone : phone})
-        if(findPhone){return res.status(400).send({status : false, msg : "This phone Number is already exists"})}
+        var checkName = /^[A-Za-z\s]+$/;
+
+        if (!checkName.test(name)) { return res.status(400).send({ status: false, msg: "You entered a invalid Name" }) }
+
+        // console.log("abcd")
+        let phone = bodyData.phone
+
+        if (!phone) { return res.status(400).send({ status: false, msg: "phone field is Required" }) }
+        if (phone.length != 10) { return res.status(400).send({ status: false, msg: "You entered an invalid Phone Number" }) }
+
+        var checkPhone = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
+
+        if (!checkPhone.test(phone)) { return res.status(400).send({ status: false, msg: "You entered a invalid Phone Number" }) }
+
+        let findPhone = await user.findOne({ phone: phone })
+        if (findPhone) { return res.status(400).send({ status: false, msg: "This phone Number is already exists" }) }
         // console.log("abc1")
         let email = bodyData.email
 
@@ -45,15 +45,15 @@ const registerUser = async function (req, res) {
         let findEmail = await user.findOne({ email: email })
         if (findEmail) { return res.status(400).send({ status: false, msg: "This EmailId is already exists" }) }
         // console.log("abc2")
-        let password=bodyData.password
+        let password = bodyData.password
         if (!password) { return res.status(400).send({ status: false, msg: "Password field is Required" }) }
-        var  passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/
+        var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/
         if (!passwordRegex.test(password)) { return res.status(400).send({ status: false, msg: "Password length is appropriate, it must be between 8 and 15 Both value is inclusive" }) }
-        console.log("abc3")
+        // console.log("abc3")
         let createUserData = await user.create(bodyData)
-        // console.log(createUserData)
+
         res.status(201).send({ status: true, message: "success", data: createUserData })
-        
+
     }
     catch (err) {
         res.status(500).send({ error: err.messaage })
@@ -77,13 +77,13 @@ let loginUser = async function (req, res) {
     let token = jwt.sign(
         {
             userId: user1._id.toString(),
+            iat: Math.floor(Date.now() / 1000),
+            exp: Math.floor(Date.now() / 1000) * 24 * 60 * 60,
 
         },
-        "functionup-radon", {
-        expiresIn: '10m'
-    }
+        "functionup-radon"
+
     );
-    res.setHeader("x-api-key", token);
     res.status(201).send({ status: true, data: { token: token } });
 
 }

@@ -3,14 +3,22 @@ const router = express.Router()
 const bookController = require('../controllers/bookController');
 const userController = require('../controllers/userController');
 const reviewController = require('../controllers/reviewController');
+const commonMiddleware = require("../middleware/auth")
 
+//-----------------------------usercontroller--------------------------------------------------------------//
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
-router.post('/books', bookController.createBook);
-// router.get('/books', bookController.getBooks);
-// router.get('/books/:bookId', bookController.getBookbyBookId);
-// router.put('/books/:bookId', bookController.updateBook);
-// router.delete('/books/:bookId', bookController.deleteBook);
+
+//----------------------------------------bookcontroller---------------------------------------------------------------//
+
+router.post('/books',commonMiddleware.tokenChecker, bookController.createBook);
+router.get('/books',commonMiddleware.tokenChecker, bookController.getBooks);
+router.get('/books/:bookId',commonMiddleware.tokenChecker, bookController.getbyBookId);
+router.put('/books/:bookId',commonMiddleware.tokenChecker, bookController.updateBook);
+router.delete('/books/:bookId',commonMiddleware.tokenChecker, bookController.deleteBook);
+
+//--------------------------------reviewcontroller------------------------------------------------------------------------------//
+
 // router.post('/books/:bookId/review', reviewController.reviewBook);
 // router.put('/books/:bookId/review/:reviewId', reviewController.updateReview);
 // router.delete('/books/:bookId/review/:reviewId', reviewController.deleteReview);

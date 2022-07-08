@@ -35,12 +35,12 @@ const bookSchema = new mongoose.Schema({
         trim: true
     },
 
-    subcategory: {
+    subcategory: [{
         type: String,
         required: true,
         lowercase: true,
         trim: true
-    },
+    }],
 
     reviews: {
         type: Number,
@@ -57,9 +57,9 @@ const bookSchema = new mongoose.Schema({
     },
 
     releasedAt: {
-        type: Date,
+        type: String,
         require:true,
-        default:Date.now
+        // default:Date.now
     },
    
 }, 

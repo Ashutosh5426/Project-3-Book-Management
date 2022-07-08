@@ -99,7 +99,7 @@
   - excerpt
   - release date
   - ISBN
-- Make sure the unique constraints are not violated when making the update
+- Make sure the unique constraints are not violated when making the update 
 - Check if the bookId exists (must have isDeleted false and is present in collection). If it doesn't, return an HTTP status 404 with a response body like [this](#error-response-structure)
 - Return an HTTP status 200 if updated successfully with a body like [this](#successful-response-structure) 
 - Also make sure in the response you return the updated book document. 
@@ -307,7 +307,7 @@ Refer below sample
     "excerpt": "book body",
     "userId": ObjectId("88abc190ef0288abc190ef02")
     "category": "Book",
-    "subcategory": "Non fiction", "Self Help"],
+    "subcategory":[ "Non fiction", "Self Help"],
     "isDeleted": false,
     "reviews": 0,
     "releasedAt": "2021-09-17"
