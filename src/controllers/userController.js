@@ -47,8 +47,7 @@ const registerUser = async function (req, res) {
         // console.log("abc2")
         let password = bodyData.password
         if (!password) { return res.status(400).send({ status: false, msg: "Password field is Required" }) }
-        var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/
-        if (!passwordRegex.test(password)) { return res.status(400).send({ status: false, msg: "Password length is appropriate, it must be between 8 and 15 Both value is inclusive" }) }
+        if (!(password.length>=8 && password.length<=15)) { return res.status(400).send({ status: false, msg: "Password length is appropriate, it must be between 8 and 15 Both value is inclusive" }) }
         // console.log("abc3")
         let createUserData = await user.create(bodyData)
 
@@ -65,7 +64,7 @@ const registerUser = async function (req, res) {
 
 let loginUser = async function (req, res) {
     let loginData = req.body
-    if (Object.keys(loginData).length == 0) { return res.status(400).send({ status: false, msg: " Please enter email and password in the Request Body" }) }
+    if (!loginData) { return res.status(400).send({ status: false, msg: " Please enter email and password in the Request Body" }) }
     let email = loginData.email
     let password = loginData.password
     if (!email) { return res.status(400).send({ status: false, msg: "email field is Required" }) }
@@ -78,7 +77,7 @@ let loginUser = async function (req, res) {
         {
             userId: user1._id.toString(),
             iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) * 24 * 60 * 60,
+            exp: Math.floor(Date.now() / 1000) * 1 * 1 * 60,
 
         },
         "functionup-radon"

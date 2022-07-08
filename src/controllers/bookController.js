@@ -22,7 +22,7 @@ const isValid = function (value) {
 const createBook = async function (req, res) {
     try {
         let data = req.body
-        if (Object.keys(data).length === 0)
+        if (!data)
             return res.status(400).send({ status: false, message: "Please enter the requied field ⚠️" });
 
         const { title, excerpt, userId, ISBN, category, subcategory } = data
@@ -86,18 +86,18 @@ const updateBook = async function (req, res) {
             return res.status(400).send({ Status: false, message: "Please enter valid bookId ⚠️" })
         const { title, ISBN, excerpt } = data //----------destructure
 
-        if (!isValid(title))
-            return res.status(400).send({ status: false, message: "Please enter the valid Title. ⚠️" })
-        if (!title.match(checkName))
-            return res.status(400).send({ status: false, message: "name should contain alphabets only. ⚠️" })
+        if(title==""){
+            return res.status(400).send({status: false, message: "Title must contain the title name,"})
+        }
+
         if (title) {
             let findtitle = await bookModel.findOne({ title: title })
             if (findtitle) { return res.status(400).send({ status: false, message: "please change your title, It is already exists" }) }
         }
 
-        if (!isValid(ISBN))
-            return res.status(400).send({ status: false, message: "Please enter the valid ISBN. ⚠️" })
-        if (!ISBN.match(isbnRegex))
+        // if()
+
+        if (isValid(ISBN) && !ISBN.match(isbnRegex))
             return res.status(400).send({ status: false, message: "You entered a invalid ISBN. ⚠️" })
         if (ISBN) {
             let findISBN = await bookModel.findOne({ ISBN: ISBN })
@@ -143,27 +143,27 @@ let getbyBookId= async function(req,res){
      
     if(!bookData){return res.status(404).send({status : false, msg : "No book found"})}
 
-    let findReview = await reviewModel.find({_id : bookId})
+    let findReview = await reviewModel.find({bookId : bookId})
 
    
 
-//    bookData["reviewsData"]=findReview
-//     return res.status(200).send({status : true, message : "Book Lists", data : bookData})
+   bookData["reviewsData"]=findReview
+    return res.status(200).send({status : true, message : "Book Lists", data : bookData})
      
-    let object = {
-        _id: bookData._id,
-    title: bookData.title,
-    excerpt: bookData.excerpt,
-    userId: bookData.userId,
-    category:bookData.category,
-    subcategory: bookData.subcategory,
-    isDeleted: bookData.isDeleted,
-    reviews: bookData.reviews,
-    releasedAt: bookData.releasedAt,
-    createdAt: bookData.createdAt,
-    updatedAt: bookData.updatedAt,
-    reviewsData : findReview
-    }
+    // let object = {
+    //     _id: bookData._id,
+    //     title: bookData.title,
+    //     excerpt: bookData.excerpt,
+    //     userId: bookData.userId,
+    //     category:bookData.category,
+    //     subcategory: bookData.subcategory,
+    //     isDeleted: bookData.isDeleted,
+    //     reviews: bookData.reviews,
+    //     releasedAt: bookData.releasedAt,
+    //     createdAt: bookData.createdAt,
+    //     updatedAt: bookData.updatedAt,
+    //     reviewsData : findReview
+    // }
 
     return res.status(200).send({status : true, message : "Book Lists", data : object})
     }
