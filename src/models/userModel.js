@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const userModel = new mongoose.Schema({
 
@@ -30,6 +30,6 @@ const userModel = new mongoose.Schema({
         city: String,
         pincode: String
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
-module.exports = mongoose.model('user', userModel)
+module.exports = mongoose.model('user', userModel);
