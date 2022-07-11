@@ -2,9 +2,14 @@ const userModel = require("../models/userModel.js");
 const emailValidator = require("email-validator");
 const jwt = require("jsonwebtoken");
 
+
+var checkPhone = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
+var checkName = /^[A-Za-z\s]+$/;
+
+
 const registerUser = async function (req, res) {
   try {
-    let bodyData = req.body;
+    let bodyData = req.body
     if (!Object.keys(bodyData).length) {
       return res
         .status(400)
@@ -36,7 +41,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "Name field is Required." });
     }
 
-    var checkName = /^[A-Za-z\s]+$/;
+   
     if (!checkName.test(name)) {
       return res
         .status(400)
@@ -49,7 +54,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "phone field is Required" });
     }
 
-    var checkPhone = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
+   
     if (!checkPhone.test(phone)) {
       return res
         .status(400)
@@ -99,7 +104,7 @@ const registerUser = async function (req, res) {
         .send({
           status: false,
           message:
-            "Password length is appropriate, its length must be between 8 and 15 Both value is inclusive",
+            "Password length is inappropriate, its length must be between 8 and 15 Both value is inclusive",
         });
     }
 

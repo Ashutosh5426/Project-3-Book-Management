@@ -8,9 +8,7 @@ let addBookReview = async function (req, res){
   try{
     let reviewData = req.body;
     let bookId = req.params.bookId;
-    // let review = reviewData.review;
-    // let rating = reviewdata.rating;
-    // let reviewerName = reviewData.reviewedBy;
+  
     let {review, rating, reviewedBy} = reviewData;
 
     if(!Object.keys(reviewData).length){
@@ -20,18 +18,18 @@ let addBookReview = async function (req, res){
     if(!review){
       return res.status(400).send({status: false, message: 'Review should be present.'})
     }
-    if(review.trim().length == 0){
+    if(review.length == 0){
       return res.status(400).send({status: false, message: 'Review field should be empty.'})
     }
 
     if(!rating){
-      return res.status(400).send({status: false, message: ''})
+      return res.status(400).send({status: false, message: 'please give some rating'})
     }
     if(rating<1 || rating>5){
       return res.status(400).send({status: false, message: 'Rating should be between 1 and 5 inclusively.'})
     }
 
-    if(reviewedBy.trim().length == 0){
+    if(reviewedBy.length == 0){
       return res.status(400).send({status: false, message: "Reviewer's should not be empty."});
     }
 

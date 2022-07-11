@@ -7,10 +7,12 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      trim:true,
       lowercase: true,
     },
     excerpt: {
       type: String,
+      trim:true,
       required: true,
     },
 
@@ -22,12 +24,13 @@ const bookSchema = new mongoose.Schema(
 
     ISBN: {
       type: String,
-      required: true,
+      required: true,  
       unique: true,
     },
     category: {
       type: String,
       required: true,
+      trim:true,
       lowercase: true,
     },
 
@@ -35,6 +38,7 @@ const bookSchema = new mongoose.Schema(
       {
         type: String,
         required: true,
+        trim:true,
         lowercase: true,
       },
     ],
