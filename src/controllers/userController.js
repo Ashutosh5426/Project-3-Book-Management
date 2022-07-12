@@ -40,7 +40,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "Name field is Required." });
     }
 
-   
+
     if (!checkName.test(name)) {
       return res
         .status(400)
@@ -53,7 +53,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "phone field is Required" });
     }
 
-   
+
     if (!checkPhone.test(phone)) {
       return res
         .status(400)
@@ -106,14 +106,14 @@ const registerUser = async function (req, res) {
         });
     }
 
-    if(Object.keys(bodyData).includes('address'))
-  {
-      if(typeof address!=="object") return res.status(400).send({ status: false, message: "address should be an object" })
-    
-        if (Object.keys(address).length == 0) {
-          return res.status(400).send({status: false,message: "address should not be empty",
-          });
-        }
+    if (Object.keys(bodyData).includes('address')) {
+      if (typeof address !== "object") return res.status(400).send({ status: false, message: "address should be an object" })
+
+      if (Object.keys(address).length == 0) {
+        return res.status(400).send({
+          status: false, message: "address should not be empty",
+        });
+      }
     }
     let createUserData = await userModel.create(bodyData);
     res
@@ -121,7 +121,7 @@ const registerUser = async function (req, res) {
       .send({ status: true, message: "Success", data: createUserData });
   } catch (err) {
     res.status(500).send({ error: err.messaage });
-};
+  };
 }
 let loginUser = async function (req, res) {
   let loginData = req.body;
@@ -154,17 +154,17 @@ let loginUser = async function (req, res) {
   }
 
   let date = Date.now();
-    let createTime = Math.floor(date / 1000);
-    let expTime = createTime + 3600;
+  let createTime = Math.floor(date / 1000);
+  let expTime = createTime + 3600;
 
-    let token = jwt.sign(
-      {
-        userId: userData._id.toString(),
-        iat: createTime,
-        exp: expTime,
-      },
-      "functionup-radon"
-    );
+  let token = jwt.sign(
+    {
+      userId: userData._id.toString(),
+      iat: createTime,
+      exp: expTime,
+    },
+    "functionup-radon"
+  );
   res.status(201).send({ status: true, data: { token: token } });
 };
 

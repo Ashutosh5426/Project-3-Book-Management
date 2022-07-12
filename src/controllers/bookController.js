@@ -66,7 +66,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: 'releasedAt should be present and not empty.' });
         }
         if (releasedAt === true) {
-            releasedAt = today.format("YYYY-MM-DD"); // Use a regex to validate date.
+            releasedAt = today.format("YYYY-MM-DD");
         }
 
         let checkBookTitle = await bookModel.findOne({ title: title });
@@ -221,7 +221,7 @@ const updateBook = async function (req, res) {
         }
 
         if (title) {
-            let findtitle = await bookModel.findOne({ title: title, isDeleted:false });
+            let findtitle = await bookModel.findOne({ title: title, isDeleted: false });
             if (findtitle) {
                 return res.status(400).send({
                     status: false,
@@ -239,7 +239,7 @@ const updateBook = async function (req, res) {
             return res.status(400).send({ status: false, message: "ISBN must contain only numerics and should have 13 digits" });
 
         if (ISBN) {
-            let findISBN = await bookModel.findOne({ ISBN: ISBN, isDeleted:false });
+            let findISBN = await bookModel.findOne({ ISBN: ISBN, isDeleted: false });
             if (findISBN) {
                 return res.status(400).send({
                     status: false,
@@ -265,7 +265,7 @@ const updateBook = async function (req, res) {
                         title: title,
                         excerpt: excerpt,
                         ISBN: ISBN,
-                        releasedAt: today.format("YYYY-MM-DD"), // It could be given manually.
+                        releasedAt: today.format("YYYY-MM-DD"),
                     },
                 },
                 { new: true, upsert: true }
