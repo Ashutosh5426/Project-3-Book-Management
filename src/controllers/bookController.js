@@ -121,7 +121,7 @@ let getBooksByQuery = async function (req, res) {
         let check = await userModel.findById(userId);
         if (!check) {
             return res
-                .status(400)
+                .status(404)
                 .send({ status: false, message: "No such userId exists" });
         }
     }

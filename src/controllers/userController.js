@@ -28,7 +28,6 @@ const registerUser = async function (req, res) {
     }
 
     let check = ["Mr", "Miss", "Mrs"];
-    // let checkEnum = await check.find(element => element == title);
     if (!check.includes(title)) {
       return res
         .status(400)
@@ -115,13 +114,6 @@ const registerUser = async function (req, res) {
           return res.status(400).send({status: false,message: "address should not be empty",
           });
         }
-
-      if (!isValid(address)) {
-        return res.status(400).send({ status: false, message: "address should not be empty" });
-      }
-
-      if (!/^[1-9][0-9]{5}$/.test(address.pincode)){ 
-        return res.status(400).send({ status: false, message: "Invalid pincode" });}
     }
     let createUserData = await userModel.create(bodyData);
     res
