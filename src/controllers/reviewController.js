@@ -103,7 +103,6 @@ let updateReview = async function (req, res){
       return res.status(400).send({status: false, message: 'Cannot Update! Field should not be empty.'});
     }
     if(rating){
-      console.log(typeof rating)
       if(!Number(rating))
       {
         return res.status(400).

@@ -62,7 +62,6 @@ const registerUser = async function (req, res) {
     }
 
     let findPhone = await userModel.findOne({ phone: phone });
-    console.log(findPhone);
     if (findPhone) {
       return res
         .status(400)
@@ -108,24 +107,30 @@ const registerUser = async function (req, res) {
         });
     }
 
-    if (typeof address != "object") {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "Address should be present in object form only.",
-        });
-    }
+    if(Object.keys(bodyData).includes('address'))
+  {
+      if(typeof address!=="object") return res.status(400).send({ status: false, message: "address should be an object" })
+    
+        if (Object.keys(address).length == 0) {
+          return res.status(400).send({status: false,message: "address should not be empty",
+          });
+        }
 
+      if (!isValid(address)) {
+        return res.status(400).send({ status: false, message: "address should not be empty" });
+      }
+
+      if (!/^[1-9][0-9]{5}$/.test(address.pincode)){ 
+        return res.status(400).send({ status: false, message: "Invalid pincode" });}
+    }
     let createUserData = await userModel.create(bodyData);
     res
       .status(201)
       .send({ status: true, message: "Success", data: createUserData });
   } catch (err) {
     res.status(500).send({ error: err.messaage });
-  }
 };
-
+}
 let loginUser = async function (req, res) {
   let loginData = req.body;
   if (!Object.keys(loginData).length) {
@@ -156,14 +161,6 @@ let loginUser = async function (req, res) {
       .send({ status: false, message: "You entered wrong Login Credentials" });
   }
 
-  // let token = jwt.sign(
-  //   {
-  //     userId: userData._id.toString(),
-  //     iat: Math.floor(Date.now() / 1000),
-  //     exp: Math.floor(Date.now() / 1000) + 100,
-  //   },
-  //   "functionup-radon"
-  // );
   let date = Date.now();
     let createTime = Math.floor(date / 1000);
     let expTime = createTime + 3600;
