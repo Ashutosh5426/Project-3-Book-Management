@@ -38,7 +38,7 @@ const createBook = async function (req, res) {
         if (!isValid(userId))
             return res
                 .status(400)
-                .send({ status: false, message: "Please enter the user. ⚠️" });
+                .send({ status: false, message: "Please enter the userId. ⚠️" });
 
         if (!isValid(ISBN))
             return res
@@ -59,7 +59,7 @@ const createBook = async function (req, res) {
 
         if (userId !== req.userId)
             return res
-                .status(401)
+                .status(403)
                 .send({ Status: false, message: "Authorisation Failed ⚠️" });
 
         if (!isValid(releasedAt)) {
@@ -95,9 +95,6 @@ const createBook = async function (req, res) {
 let getBooksByQuery = async function (req, res) {
     let queryData = req.query;
     let { userId, category, subcategory } = queryData;
-    // let userId = queryData.userId;
-    // let category = queryData.category;
-    // let subcategory = queryData.subcategory;
 
     if (!queryData) {
         let findData = await bookModel.find({ isDeleted: false }).select({
@@ -132,14 +129,14 @@ let getBooksByQuery = async function (req, res) {
     let findData = await bookModel
         .find({ $and: [queryData, { isDeleted: false }] })
         .select({
-            _id: 1,
+
             title: 1,
             excerpt: 1,
             userId: 1,
             category: 1,
             reviews: 1,
             releasedAt: 1,
-        });
+        }).sort({ title: 1 });
 
     if (findData.length == 0) {
         return res.status(404).send({ status: false, message: "No book found" });
@@ -161,7 +158,7 @@ let getbyBookId = async function (req, res) {
                 .send({ status: false, message: "You entered a invalid BookId" });
         }
 
-        let bookData = await bookModel.findOne({ _id: bookId }).select({ _v: 0 });
+        let bookData = await bookModel.findOne({ _id: bookId, isDeleted: false }).select({ _v: 0 });
 
         if (!bookData) {
             return res.status(404).send({ status: false, message: "No book found" });
@@ -169,10 +166,6 @@ let getbyBookId = async function (req, res) {
 
         let findReview = await reviewModel.find({ bookId: bookId, isDeleted: false });
 
-        //   bookData["reviewsData"] = findReview;
-        //   return res
-        //     .status(200)
-        //     .send({ status: true, message: "Book Lists", data: bookData });
 
         let object = {
             _id: bookData._id,
@@ -203,17 +196,17 @@ const updateBook = async function (req, res) {
     try {
         let data = req.body;
         let bookId = req.params.bookId;
-        // console.log(bookId);
         if (!mongoose.isValidObjectId(bookId))
             return res
                 .status(400)
                 .send({ Status: false, message: "Please enter valid bookId ⚠️" });
-        const { title, excerpt, releaseDate, ISBN } = data; //----------destructure
+        const { title, excerpt, releaseDate, ISBN } = data;
 
         if (!Object.keys(data).length)
             return res
                 .status(404)
                 .send({ Status: false, message: "No data for Update ⚠️" });
+
         let findbook = await bookModel.findById(bookId);
         if (findbook.userId != req.userId)
             return res
@@ -228,7 +221,7 @@ const updateBook = async function (req, res) {
         }
 
         if (title) {
-            let findtitle = await bookModel.findOne({ title: title });
+            let findtitle = await bookModel.findOne({ title: title, isDeleted:false });
             if (findtitle) {
                 return res.status(400).send({
                     status: false,
@@ -241,11 +234,12 @@ const updateBook = async function (req, res) {
             return res
                 .status(400)
                 .send({ status: false, message: "please enter a ISBN number. ⚠️" });
+
         if (ISBN.trim().length !== 13 || !Number(ISBN))
             return res.status(400).send({ status: false, message: "ISBN must contain only numerics and should have 13 digits" });
 
         if (ISBN) {
-            let findISBN = await bookModel.findOne({ ISBN: ISBN });
+            let findISBN = await bookModel.findOne({ ISBN: ISBN, isDeleted:false });
             if (findISBN) {
                 return res.status(400).send({
                     status: false,
@@ -255,7 +249,7 @@ const updateBook = async function (req, res) {
         }
 
 
-        if (!findbook) // is any error possible.
+        if (!findbook)
             return res.status(404).send({ message: "bookId  is invalid ⚠️" });
 
         if (findbook.isDeleted)
@@ -315,8 +309,8 @@ const deleteBook = async function (req, res) {
                 res.status(200).send({ status: true, message: "data deleted ⚠️" });
             } else {
                 res
-                    .status(200)
-                    .send({ status: false, message: "data already deleted ⚠️" });
+                    .status(404)
+                    .send({ status: false, message: "data is already deleted ⚠️" });
             }
         }
     } catch (error) {
