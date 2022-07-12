@@ -5,7 +5,7 @@ module.exports.tokenChecker = async function (req, res, next) {
     let token = req.headers["x-api-key"];
 
     if (!token) {
-      return res.status(403).send({ status: false, message: "Missing authentication token in request ⚠️", });
+      return res.status(401).send({ status: false, message: "Missing authentication token in request ⚠️", });
     }
 
     const decoded = jwt.decode(token);

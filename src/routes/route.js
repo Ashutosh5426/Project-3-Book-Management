@@ -19,8 +19,8 @@ router.delete('/books/:bookId', commonMiddleware.tokenChecker, bookController.de
 
 //--------------------------------reviewcontroller------------------------------------------------------------------------------//
 
-router.post('/books/:bookId/review', commonMiddleware.tokenChecker, reviewController.addBookReview);
-router.put('/books/:bookId/review/:reviewId', commonMiddleware.tokenChecker, reviewController.updateBookReview);
-router.delete('/books/:bookId/review/:reviewId', commonMiddleware.tokenChecker, reviewController.deleteBookReview);
+router.post('/books/:bookId/review', reviewController.addBookReview);
+router.put('/books/:bookId/review/:reviewId', reviewController.updateBookReview);
+router.delete('/books/:bookId/review/:reviewId', reviewController.deleteBookReview);
 
 module.exports = router;

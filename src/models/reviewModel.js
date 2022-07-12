@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-const bookModel = require('./bookModel');
+// const bookModel = require('./bookModel');
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const reviewSchema = new mongoose.Schema({
   bookId: {
     type: ObjectId,
-    ref: bookModel,
+    ref: "book",
     required: true
   },
   reviewedBy: {

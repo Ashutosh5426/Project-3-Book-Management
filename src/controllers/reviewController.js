@@ -1,6 +1,6 @@
 const reviewModel = require('../models/reviewModel');
 const bookModel = require('../models/bookModel');
-
+const mongoose=require ('mongoose');
 
 /*********************************addBookReview*************************************/
 // Review request should accept only numbers. Add a Validation for it.
@@ -8,9 +8,13 @@ let addBookReview = async function (req, res){
   try{
     let reviewData = req.body;
     let bookId = req.params.bookId;
+
+    if (!mongoose.isValidObjectId(bookId)) 
+     return res.status(400).send({ status: false, message: "Invalid book id."})
+
   
     let {review, rating, reviewedBy} = reviewData;
-
+    reviewData.bookId=bookId
     if(!Object.keys(reviewData).length){
        return res.status(400).send({status: true, message: 'Bad Request, Please enter the details in the request body.'})
     }
@@ -19,11 +23,11 @@ let addBookReview = async function (req, res){
       return res.status(400).send({status: false, message: 'Review should be present.'})
     }
     if(review.length == 0){
-      return res.status(400).send({status: false, message: 'Review field should be empty.'})
+      return res.status(400).send({status: false, message: 'Review field should not be empty.'})
     }
 
     if(!rating){
-      return res.status(400).send({status: false, message: 'please give some rating'})
+      return res.status(400).send({status: false, message: 'please provide rating'})
     }
     if(rating<1 || rating>5){
       return res.status(400).send({status: false, message: 'Rating should be between 1 and 5 inclusively.'})
@@ -72,9 +76,9 @@ let updateBookReview = async function (req, res){
   }
   
   let {review, rating, reviewedBy} = dataToUpdate;  // Are all compulsary.
-  if(review.trim().length == 0){
-    return res.status(400).send({status: falsse, message: 'Review field should not be empty.'});
-  }
+  // if(review.length == 0){
+  //   return res.status(400).send({status: falsse, message: 'Review field should not be empty.'});
+  // }
 
   if(rating<1 || rating>5){
     return res.status(400).send({status: false, message: 'Rating should be in range (1, 5) inclusively.'});
@@ -91,15 +95,15 @@ let updateBookReview = async function (req, res){
   if(BookData.isDeleted){
     return res.status(400).send({status: false, message: 'Cannot Update! The book is deleted before.'});
   }
-  let reviewData = await reviewModel.findOne({_id: reviewId});
-  if(reviewData.review){
-    return res.status(400).send({status: false, message: 'Cannot Update! Review is already given to this book.'});
-  }
+  // let reviewData = await reviewModel.findOne({_id: reviewId});
+  // if(reviewData.review){
+  //   return res.status(400).send({status: false, message: 'Cannot Update! Review is already given to this book.'});
+  // }
   let updatedReviewData = await reviewModel.findOneAndUpdate({_id: reviewId}, {
     $set: {
       review: review,
       rating: rating,
-      reviewedBy: reviewerName
+      reviewedBy: reviewedBy
     }
   }, {new: true, upsert: true})     // What should be in return data
   return res.status(200).send({status: true, message: 'Book list', data: updatedReviewData});
