@@ -167,7 +167,7 @@ let getbyBookId = async function (req, res) {
             return res.status(404).send({ status: false, message: "No book found" });
         }
 
-        let findReview = await reviewModel.find({ bookId: bookId });
+        let findReview = await reviewModel.find({ bookId: bookId, isDeleted: false });
 
         //   bookData["reviewsData"] = findReview;
         //   return res
@@ -203,7 +203,7 @@ const updateBook = async function (req, res) {
     try {
         let data = req.body;
         let bookId = req.params.bookId;
-
+        // console.log(bookId);
         if (!mongoose.isValidObjectId(bookId))
             return res
                 .status(400)

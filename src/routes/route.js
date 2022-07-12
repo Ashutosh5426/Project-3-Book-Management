@@ -20,7 +20,7 @@ router.delete('/books/:bookId', commonMiddleware.tokenChecker, bookController.de
 //--------------------------------reviewcontroller------------------------------------------------------------------------------//
 
 router.post('/books/:bookId/review', reviewController.addBookReview);
-router.put('/books/:bookId/review/:reviewId', reviewController.updateBookReview);
+router.put('/books/:bookId/review/:reviewId', reviewController.updateReview);
 router.delete('/books/:bookId/review/:reviewId', reviewController.deleteBookReview);
 
 module.exports = router;
