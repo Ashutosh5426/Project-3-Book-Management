@@ -3,6 +3,7 @@ const router = express.Router()
 const bookController = require('../controllers/bookController');
 const userController = require('../controllers/userController');
 const reviewController = require('../controllers/reviewController');
+const  {bookCoverurl}= require('../aws/aws');
 const commonMiddleware = require("../middleware/auth")
 
 //-----------------------------usercontroller--------------------------------------------------------------//
@@ -21,6 +22,8 @@ router.get('/books/:bookId', commonMiddleware.tokenChecker, bookController.getby
 router.put('/books/:bookId', commonMiddleware.tokenChecker, bookController.updateBook);
 
 router.delete('/books/:bookId', commonMiddleware.tokenChecker, bookController.deleteBook);
+
+router.post ('/bookCoverurl',bookCoverurl);
 
 //--------------------------------reviewcontroller------------------------------------------------------------------------------//
 

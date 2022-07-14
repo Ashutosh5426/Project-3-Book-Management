@@ -1,7 +1,7 @@
 const reviewModel = require('../models/reviewModel');
 const bookModel = require('../models/bookModel');
 const mongoose = require('mongoose');
-const validators = require('../validator/validator');
+
 
 var checkName = /^[A-Za-z\s]+$/;
 
@@ -116,7 +116,7 @@ let updateReview = async function (req, res) {
     if (reviewData.review == review) {
       return res.status(400).send({ status: false, message: 'Cannot Update! This review is already exist for the given reviewId' });
     }
-    let updatedReviewData = await reviewModel.findOneAndUpdate({ _id: reviewId }, {
+    let updatedReviewData = await reviewModel.findOneAndUpdate({ _id: reviewId, isDeleted:false }, {
       $set: {
         review: review,
         rating: rating,

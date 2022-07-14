@@ -22,7 +22,7 @@ const createBook = async function (req, res) {
                 .status(400)
                 .send({ status: false, message: "Bad Request, Please enter the details in the request body." });
 
-        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data;
+        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt,bookCover } = data;
 
         if (!isValid(title))
             return res
@@ -65,9 +65,13 @@ const createBook = async function (req, res) {
         if (!isValid(releasedAt)) {
             return res.status(400).send({ status: false, message: 'releasedAt should be present and not empty.' });
         }
-        if (releasedAt === true) {
-            releasedAt = today.format("YYYY-MM-DD");
-        }
+        
+        // if (releasedAt === true) {
+        //     releasedAt = today.format("YYYY-MM-DD");
+        // }
+        let validReleasedAt=moment(`${releasedAt}`,"YYYY-MM-DD").isValid()
+        if (validReleasedAt==false)
+        return res.status(400).send({ status: false, message: 'releseAt should be in YYYY-MM-DD format.' });
 
         let checkBookTitle = await bookModel.findOne({ title: title });
         if (checkBookTitle)
@@ -104,7 +108,7 @@ let getBooksByQuery = async function (req, res) {
             userId: 1,
             category: 1,
             reviews: 1,
-            releasedAt: 1,
+            releasedAt: 1
         });
 
         return res

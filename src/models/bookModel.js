@@ -42,13 +42,17 @@ const bookSchema = new mongoose.Schema(
         lowercase: true,
       },
     ],
+    bookCover:{
+      type:String,
+      
+    },
 
     reviews: {
       type: Number,
       default: 0,
     },
     deletedAt: {
-      type: Date,
+      type: Date
     },
 
     isDeleted: {
